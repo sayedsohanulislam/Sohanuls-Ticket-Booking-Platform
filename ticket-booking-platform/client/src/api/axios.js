@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const baseURL =
-  (typeof process !== 'undefined' ? (process.env.NEXT_PUBLIC_VITE_API_URL || process.env.VITE_API_URL) : undefined) || "http://localhost:5000/api";
+const baseURL = process.env.NEXT_PUBLIC_VITE_API_URL || "http://localhost:5000/api";
 
 export const api = axios.create({
   baseURL,
@@ -62,7 +61,7 @@ export const getStoredToken = () => typeof window !== "undefined" ? localStorage
 
 // ====== Image upload helper (imgbb) ======
 export async function uploadToImgbb(file) {
-  const apiKey = (typeof process !== 'undefined' ? (process.env.NEXT_PUBLIC_VITE_IMGBB_API_KEY || process.env.VITE_IMGBB_API_KEY) : undefined);
+  const apiKey = process.env.NEXT_PUBLIC_VITE_IMGBB_API_KEY || "a7d25e0a6d0c4eb5b1c55d045d475ef0";
   if (!apiKey) {
     throw new Error("imgbb API key is not configured (VITE_IMGBB_API_KEY)");
   }

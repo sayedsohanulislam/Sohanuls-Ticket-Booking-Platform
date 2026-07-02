@@ -43,7 +43,7 @@ export default function Login() {
   });
 
   async function handleGoogle() {
-    const clientId = typeof process !== "undefined" ? (process.env.NEXT_PUBLIC_VITE_GOOGLE_CLIENT_ID || process.env.VITE_GOOGLE_CLIENT_ID) : undefined;
+    const clientId = process.env.NEXT_PUBLIC_VITE_GOOGLE_CLIENT_ID;
     if (!clientId || clientId === "your_google_client_id" || clientId === "") {
       try {
         await googleLogin({
