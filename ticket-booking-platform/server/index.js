@@ -1,6 +1,6 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
@@ -10,11 +10,9 @@ import bookingRoutes from "./routes/bookingRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
-dotenv.config();
-
 const app = express();
 
-// ====== Global middleware ======
+// ====== Global CORS and middleware setup ======
 app.use(
   cors({
     origin: (process.env.CLIENT_URL || "http://localhost:5173").split(","),
