@@ -11,6 +11,8 @@ import User from "../models/User.js";
 import Ticket from "../models/Ticket.js";
 import Booking from "../models/Booking.js";
 
+import dns from "dns";
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 dotenv.config();
 
 const MONGO_URI =
