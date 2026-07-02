@@ -5,6 +5,7 @@ import {
   vendorRequests,
   acceptBooking,
   rejectBooking,
+  cancelBooking,
 } from "../controllers/bookingController.js";
 import { protect, authorize } from "../middleware/auth.js";
 
@@ -15,6 +16,8 @@ router.use(protect);
 // User
 router.post("/", createBooking);
 router.get("/mine", myBookings);
+router.delete("/:id/cancel", cancelBooking);
+
 
 // Vendor
 router.get("/requests", authorize("vendor"), vendorRequests);

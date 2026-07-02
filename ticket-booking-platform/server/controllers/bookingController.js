@@ -94,3 +94,18 @@ export async function markBookingPaid(bookingId, paymentIntentId) {
   }
   return booking;
 }
+
+// DELETE /api/bookings/:id/cancel — user cancels booking
+export const cancelBooking = asyncHandler(async (req, res) => {
+  const booking = await Booking.findById(req.params.id);
+  if (!booking) throw createError("Booking not found", 404);
+  if (booking.user.toString() !== req.user._id.toString()) {
+    throw createError("Not authorized to cancel this booking", 403);
+  }
+  if (booking.status !== "pending") {
+    throw createError("Booking cannot be cancelled once accepted or rejected", 400);
+  }
+  await booking.deleteOne();
+  res.json({ message: "Booking cancelled successfully" });
+});
+
