@@ -8,7 +8,7 @@ import { ThemeProvider } from "./context/ThemeContext.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./index.css";
 
-const googleClientId = (typeof process !== 'undefined' ? (process.env.NEXT_PUBLIC_VITE_GOOGLE_CLIENT_ID || process.env.VITE_GOOGLE_CLIENT_ID) : undefined) || "";
+const googleClientId = process.env.NEXT_PUBLIC_VITE_GOOGLE_CLIENT_ID || "";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

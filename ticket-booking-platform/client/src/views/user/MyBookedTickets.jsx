@@ -14,7 +14,7 @@ import { api } from "../../api/axios.js";
 import Spinner from "../../components/Spinner.jsx";
 
 const stripePromise = loadStripe(
-  ((typeof process !== 'undefined' ? (process.env.NEXT_PUBLIC_VITE_STRIPE_PUBLISHABLE_KEY || process.env.VITE_STRIPE_PUBLISHABLE_KEY) : undefined) || "pk_test_dummy").trim()
+  (process.env.NEXT_PUBLIC_VITE_STRIPE_PUBLISHABLE_KEY || "pk_test_dummy").trim()
 );
 
 function downloadTicketPDF(b) {
