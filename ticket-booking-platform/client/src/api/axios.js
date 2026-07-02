@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const baseURL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+  (typeof process !== 'undefined' ? (process.env.NEXT_PUBLIC_VITE_API_URL || process.env.VITE_API_URL) : undefined) || "http://localhost:5000/api";
 
 export const api = axios.create({
   baseURL,
@@ -10,7 +10,7 @@ export const api = axios.create({
 
 // Attach JWT from localStorage on every request
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("tb_token");
+  const token = typeof window !== "undefined" ? localStorage.getItem("tb_token") : null;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -24,8 +24,10 @@ api.interceptors.response.use(
     if (err.response?.status === 401) {
       // don't redirect on auth/me — that would cause loops on app load
       if (!err.config.url.includes("/auth/")) {
-        localStorage.removeItem("tb_token");
-        localStorage.removeItem("tb_user");
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("tb_token");
+          localStorage.removeItem("tb_user");
+        }
       }
     }
     return Promise.reject(err);
@@ -34,16 +36,21 @@ api.interceptors.response.use(
 
 // Convenience helpers
 export const setSession = ({ token, ...user }) => {
-  if (token) localStorage.setItem("tb_token", token);
-  if (user) localStorage.setItem("tb_user", JSON.stringify(user));
+  if (typeof window !== "undefined") {
+    if (token) localStorage.setItem("tb_token", token);
+    if (user) localStorage.setItem("tb_user", JSON.stringify(user));
+  }
 };
 
 export const clearSession = () => {
-  localStorage.removeItem("tb_token");
-  localStorage.removeItem("tb_user");
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("tb_token");
+    localStorage.removeItem("tb_user");
+  }
 };
 
 export const getStoredUser = () => {
+  if (typeof window === "undefined") return null;
   try {
     return JSON.parse(localStorage.getItem("tb_user") || "null");
   } catch {
@@ -51,11 +58,11 @@ export const getStoredUser = () => {
   }
 };
 
-export const getStoredToken = () => localStorage.getItem("tb_token");
+export const getStoredToken = () => typeof window !== "undefined" ? localStorage.getItem("tb_token") : null;
 
 // ====== Image upload helper (imgbb) ======
 export async function uploadToImgbb(file) {
-  const apiKey = import.meta.env.VITE_IMGBB_API_KEY;
+  const apiKey = (typeof process !== 'undefined' ? (process.env.NEXT_PUBLIC_VITE_IMGBB_API_KEY || process.env.VITE_IMGBB_API_KEY) : undefined);
   if (!apiKey) {
     throw new Error("imgbb API key is not configured (VITE_IMGBB_API_KEY)");
   }
