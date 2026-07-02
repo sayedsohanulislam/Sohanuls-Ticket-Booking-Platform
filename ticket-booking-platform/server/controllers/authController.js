@@ -41,21 +41,43 @@ export const login = asyncHandler(async (req, res) => {
   res.json({ user: sanitize(user) });
 });
 
-// POST /api/auth/google  — receives a payload from the client (BetterAuth-style)
-// In production you would verify the Google ID token server-side.
+// POST /api/auth/google  — receives a payload from the client (Google Access Token or mock fallback)
 export const googleLogin = asyncHandler(async (req, res) => {
-  const { email, name, providerId, avatar } = req.body;
+  const { token, email: mockEmail, name: mockName, providerId: mockProviderId, avatar: mockAvatar } = req.body;
+
+  let email = mockEmail;
+  let name = mockName || "Google User";
+  let providerId = mockProviderId;
+  let avatar = mockAvatar;
+
+  // If a real Google Access Token is provided, verify it with Google's API
+  if (token) {
+    try {
+      const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${token}`);
+      const googleUser = await response.json();
+      if (!googleUser.email) {
+        throw createError("Failed to retrieve user info from Google", 400);
+      }
+      email = googleUser.email;
+      name = googleUser.name || googleUser.given_name || "Google User";
+      providerId = googleUser.sub;
+      avatar = googleUser.picture || "";
+    } catch (err) {
+      throw createError("Invalid Google token or verification failed", 401);
+    }
+  }
+
   if (!email) throw createError("Email is required from Google payload", 400);
 
   let user = await User.findOne({ email });
   if (!user) {
     user = await User.create({
-      name: name || "Google User",
+      name,
       email,
       password: Math.random().toString(36).slice(2) + "G0!", // random placeholder
       provider: "google",
-      providerId,
-      avatar,
+      providerId: providerId || "",
+      avatar: avatar || "",
     });
   }
   res.json({ user: sanitize(user) });
