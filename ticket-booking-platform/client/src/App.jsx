@@ -6,33 +6,33 @@ import DashboardLayout from "./components/DashboardLayout.jsx";
 
 import { useAuth } from "./context/AuthContext.jsx";
 
-// Public pages
-import Home from "./pages/Home.jsx";
-import AllTickets from "./pages/AllTickets.jsx";
-import TicketDetails from "./pages/TicketDetails.jsx";
-import Login from "./pages/Login.jsx";
-import Register from "./pages/Register.jsx";
-import NotFound from "./pages/NotFound.jsx";
-import About from "./pages/About.jsx";
-import Contact from "./pages/Contact.jsx";
+// Public views
+import Home from "./views/Home.jsx";
+import AllTickets from "./views/AllTickets.jsx";
+import TicketDetails from "./views/TicketDetails.jsx";
+import Login from "./views/Login.jsx";
+import Register from "./views/Register.jsx";
+import NotFound from "./views/NotFound.jsx";
+import About from "./views/About.jsx";
+import Contact from "./views/Contact.jsx";
 
 // User dashboard
-import UserProfile from "./pages/user/Profile.jsx";
-import MyBookedTickets from "./pages/user/MyBookedTickets.jsx";
-import TransactionHistory from "./pages/user/TransactionHistory.jsx";
+import UserProfile from "./views/user/Profile.jsx";
+import MyBookedTickets from "./views/user/MyBookedTickets.jsx";
+import TransactionHistory from "./views/user/TransactionHistory.jsx";
 
 // Vendor dashboard
-import VendorProfile from "./pages/vendor/Profile.jsx";
-import AddTicket from "./pages/vendor/AddTicket.jsx";
-import MyTickets from "./pages/vendor/MyTickets.jsx";
-import RequestedBookings from "./pages/vendor/RequestedBookings.jsx";
-import RevenueOverview from "./pages/vendor/Revenue.jsx";
+import VendorProfile from "./views/vendor/Profile.jsx";
+import AddTicket from "./views/vendor/AddTicket.jsx";
+import MyTickets from "./views/vendor/MyTickets.jsx";
+import RequestedBookings from "./views/vendor/RequestedBookings.jsx";
+import RevenueOverview from "./views/vendor/Revenue.jsx";
 
 // Admin dashboard
-import AdminProfile from "./pages/admin/Profile.jsx";
-import ManageTickets from "./pages/admin/ManageTickets.jsx";
-import ManageUsers from "./pages/admin/ManageUsers.jsx";
-import AdvertiseTickets from "./pages/admin/AdvertiseTickets.jsx";
+import AdminProfile from "./views/admin/Profile.jsx";
+import ManageTickets from "./views/admin/ManageTickets.jsx";
+import ManageUsers from "./views/admin/ManageUsers.jsx";
+import AdvertiseTickets from "./views/admin/AdvertiseTickets.jsx";
 
 function useUserRole() {
   const { user } = useAuth();
