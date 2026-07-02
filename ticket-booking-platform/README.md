@@ -1,338 +1,143 @@
-# TicketBari — Online Ticket Booking Platform (MERN)
+# 🚌 TicketBari — Premium Online Ticket Booking Platform
 
-A complete Online Ticket Booking Platform where users can discover and book travel
-tickets (Bus, Train, Launch, Plane). Three user roles — **User**, **Vendor**, and
-**Admin** — each with their own dashboard.
+[![Next.js](https://img.shields.io/badge/Frontend-Next.js%2015-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![Express](https://img.shields.io/badge/Backend-Express%204-lightgrey?style=for-the-badge&logo=express)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/Database-MongoDB-green?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
+[![Stripe](https://img.shields.io/badge/Payments-Stripe-indigo?style=for-the-badge&logo=stripe)](https://stripe.com/)
+[![Framer Motion](https://img.shields.io/badge/Animations-Framer%20Motion-pink?style=for-the-badge&logo=framer-motion)](https://www.framer.com/motion/)
 
-> Built with **MongoDB · Express · React · Node.js (MERN)**, JWT auth, Stripe
-> payments, imgbb image uploads, Tailwind CSS, Recharts and Swiper.js.
-
----
-
-## Table of contents
-
-1. [Key features](#key-features)
-2. [Tech stack](#tech-stack)
-3. [Project structure](#project-structure)
-4. [Getting started (local)](#getting-started-local)
-5. [Environment variables](#environment-variables)
-6. [Default demo accounts](#default-demo-accounts)
-7. [API reference](#api-reference)
-8. [Frontend routes](#frontend-routes)
-9. [Deployment notes](#deployment-notes)
-10. [Submission template](#submission-template)
+A complete, feature-rich **Online Ticket Booking Platform** where users can discover and book tickets for **Buses, Trains, Launches, and Flights** across Bangladesh. The platform features three distinct user roles—**User (Traveler)**, **Vendor**, and **Admin**—each with their own secure, personalized dashboards.
 
 ---
 
-## Key features
+## 🌟 Premium Features
 
-### Authentication
-- Email/password registration & login (JWT)
-- Google social login (BetterAuth-style flow)
-- Protected routes — logged-in users never redirect to /login on reload
+### 🔐 Authentication & Security
+- **Next.js & JWT-Protected Routes**: Role-based routing guards ensure secure pages. Logged-in users are kept in their dashboard session upon browser refreshes.
+- **Real Google OAuth**: Full popup login integration securely validated against Google userinfo APIs. Includes a fallback mechanism for developer testing.
+- **Quick Developer Login**: High-speed login buttons on the login card to instantly authenticate as Admin, Vendor, or Traveler with one click.
 
-### Public pages
-- **Home**: Swiper hero slider, 6 admin-curated Advertisement tickets, 6–8 Latest
-  tickets, Popular Routes, "Why Choose Us" sections
-- **All Tickets**: search by From → To, filter by transport type, sort by price
-  (Low → High / High → Low), pagination (6 per page)
-- **Ticket Details**: full ticket info, live countdown to departure, "Book Now"
-  modal (disabled if departed or sold out)
-- **About / Contact** pages
-- Custom 404 page for invalid routes
+### 🚌 Interactive Booking Experience
+- **Live Seat Map Grid**: Toggling seat maps for Bus travel lets users visually reserve specific seats, driving booking counts dynamically.
+- **Real-Time Countdown**: Display of hours/minutes left until departure time.
+- **Paid Ticket PDF Print**: Generate and print clean, professional PDF receipts complete with barcode generators.
 
-### User dashboard (role: `user`)
-- User Profile (view + edit name / avatar)
-- My Booked Tickets — 3-column grid with status badges (pending / accepted /
-  rejected / paid) + countdown; "Pay Now" with Stripe once accepted
-- Transaction History — table of all Stripe payments
-
-### Vendor dashboard (role: `vendor`)
-- Vendor Profile
-- Add Ticket — form with image upload (imgbb), perks checkboxes, readonly vendor
-  info; saved with verification status `pending`
-- My Added Tickets — 3-column grid, Update / Delete actions (disabled if rejected)
-- Requested Bookings — table with Accept / Reject buttons
-- Revenue Overview — KPI cards (tickets added, sold, revenue) + bar chart and
-  pie chart (Recharts)
-
-### Admin dashboard (role: `admin`)
-- Admin Profile
-- Manage Tickets — approve / reject tickets submitted by vendors
-- Manage Users — promote users to admin / vendor, mark vendor as fraud (auto
-  hides their tickets and prevents future additions)
-- Advertise Tickets — toggle homepage advertisement (max 6 tickets)
-
-### Cross-cutting
-- **JWT-protected APIs** with role-based authorization middleware
-- **Dark / Light mode toggle** (persisted to localStorage)
-- **Loading spinners** on every async fetch
-- **Responsive** layout (mobile, tablet, desktop) with hamburger nav
-- **Toast notifications** for every user action
-- **Error page** for invalid routes
+### 🎨 Visual & UI Polish
+- **Framer Motion Animations**: Sleek landing page entries, hover-lift cards, and smooth state transitions.
+- **Theme Persistance**: Fully integrated Dark / Light mode toggle saved across browser reloads.
+- **Statistics Section & Swiper Slider**: Live statistics counter and dynamic traveler review carousel.
 
 ---
 
-## Tech stack
+## 🛠️ Tech Stack
 
-| Layer       | Technology |
-|-------------|-----------|
-| Frontend    | React 18 + Vite + React Router v6 |
-| Styling     | Tailwind CSS 3 (with dark mode) |
-| Forms       | React Hook Form |
-| Charts      | Recharts |
-| Slider      | Swiper.js |
-| Icons       | react-icons |
-| Toasts      | react-hot-toast |
-| HTTP        | axios |
-| Payments    | Stripe (PaymentIntents via `@stripe/react-stripe-js`) |
-| Backend     | Node.js + Express |
-| Database    | MongoDB + Mongoose |
-| Auth        | JWT (`jsonwebtoken`) + `bcryptjs` |
-| Image upload| imgbb (client-side direct upload) |
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | Next.js 15 (App Router), React 18, React Router v6, React Hook Form |
+| **Styling & UI** | Tailwind CSS 3, Framer Motion, Swiper.js, React Icons, React Hot Toast |
+| **Charts** | Recharts (dynamic revenue logs, bar and pie graphs) |
+| **Payments** | Stripe (PaymentIntents via `@stripe/react-stripe-js`) |
+| **Backend** | Node.js + Express + JWT (`jsonwebtoken`) |
+| **Database** | MongoDB + Mongoose ODM |
+| **Image Upload**| imgbb (direct client-side file upload) |
 
 ---
 
-## Project structure
+## 📂 Project Structure
 
-```
+```text
 ticket-booking-platform/
-├── client/                # React + Vite frontend
-│   ├── public/
-│   │   └── favicon.svg
+├── client/                # Next.js App Router Frontend
+│   ├── app/               # Next.js App Router root layout & catch-all
+│   ├── public/            # Favicon and realistic category images (bus, train, launch, plane)
 │   ├── src/
-│   │   ├── api/axios.js
-│   │   ├── components/   # Navbar, Footer, Layout, Spinner, TicketCard,
-│   │   │                  # ProtectedRoute, DashboardLayout
-│   │   ├── context/      # AuthContext, ThemeContext
-│   │   ├── pages/
-│   │   │   ├── Home.jsx AllTickets.jsx TicketDetails.jsx
-│   │   │   ├── Login.jsx Register.jsx NotFound.jsx About.jsx Contact.jsx
-│   │   │   ├── user/    # Profile, MyBookedTickets, TransactionHistory
-│   │   │   ├── vendor/  # Profile, AddTicket, MyTickets, RequestedBookings, Revenue
-│   │   │   └── admin/   # Profile, ManageTickets, ManageUsers, AdvertiseTickets
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │   └── index.css
-│   ├── .env.example
-│   ├── index.html
-│   ├── package.json
-│   ├── tailwind.config.js
-│   ├── postcss.config.js
-│   └── vite.config.js
-└── server/               # Node + Express backend
-    ├── config/db.js
-    ├── controllers/      # auth, ticket, booking, payment, user
-    ├── middleware/       # auth (JWT), errorHandler
-    ├── models/           # User, Ticket, Booking, Transaction
-    ├── routes/           # auth, tickets, bookings, payments, users
-    ├── utils/seed.js     # seeds admin/vendor/user + sample tickets
-    ├── .env.example
-    ├── index.js
-    └── package.json
+│   │   ├── api/axios.js   # SSR-safe axios instance with localStorage gating
+│   │   ├── components/    # Navbar, Footer, Loading Spinner, Ticket Cards
+│   │   ├── context/       # AuthContext, ThemeContext
+│   │   └── views/         # Role-specific dashboard pages (User, Vendor, Admin)
+│   └── next.config.mjs    # Next.js bundler config
+└── server/                # Express API Backend
+    ├── config/db.js       # MongoDB connection with local fallback failover
+    ├── controllers/       # Auth, ticket, booking, payment logic
+    ├── middleware/        # JWT validator & Express error handler
+    ├── models/            # Mongoose Schemas (User, Ticket, Booking, Transaction)
+    ├── routes/            # Express routers
+    └── utils/seed.js      # Populates database with matching assets & credentials
 ```
 
 ---
 
-## Getting started (local)
+## 🚀 Getting Started (Local)
 
-### Prerequisites
-- Node.js ≥ 18
-- MongoDB (local or MongoDB Atlas)
-
-### 1. Clone & install
-
+### 1. Installation
+Install dependencies for both client and server:
 ```bash
-# install server deps
+# Install backend packages
 cd server
 npm install
 
-# install client deps
+# Install frontend packages
 cd ../client
 npm install
 ```
 
-### 2. Configure environment
-
-```bash
-# server
-cp server/.env.example server/.env
-# fill in MONGO_URI, JWT_SECRET, STRIPE_SECRET_KEY …
-
-# client
-cp client/.env.example client/.env
-# fill in VITE_API_URL, VITE_STRIPE_PUBLISHABLE_KEY, VITE_IMGBB_API_KEY …
-```
-
-### 3. Seed the database (optional but recommended)
-
+### 2. Seeding the Database
+To populate your local MongoDB database with mock data and real category images:
 ```bash
 cd server
 npm run seed
 ```
 
-Creates three demo accounts and a few sample tickets.
-
-### 4. Run
-
+### 3. Running Locally
+Start both development environments:
 ```bash
-# terminal 1 — server
+# Terminal 1 — Server (runs on http://localhost:5000)
 cd server
-npm run dev   # http://localhost:5000
+npm run dev
 
-# terminal 2 — client
+# Terminal 2 — Client (runs on http://localhost:3000)
 cd client
-npm run dev   # http://localhost:5173
+npm run dev
 ```
 
-Open http://localhost:5173 and log in with any of the demo accounts below.
+---
+
+## 🔑 Default Accounts
+
+After running the seeder script, you can log in instantly using the **Quick Developer Login** buttons or with these credentials:
+
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Admin** | `admin@ticketbari.test` | `Admin123!` |
+| **Vendor** | `vendor@ticketbari.test` | `Vendor123!` |
+| **User** | `user@ticketbari.test` | `User123!` |
 
 ---
 
-## Environment variables
-
-### `server/.env`
-| Key | Description |
-|-----|-------------|
-| `PORT` | Server port (default 5000) |
-| `NODE_ENV` | `development` or `production` |
-| `CLIENT_URL` | Comma-separated list of allowed CORS origins |
-| `MONGO_URI` | MongoDB connection string |
-| `JWT_SECRET` | Long random string used to sign tokens |
-| `JWT_EXPIRES_IN` | e.g. `7d` |
-| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | For Google OAuth (optional) |
-| `STRIPE_SECRET_KEY` | Stripe secret key |
-| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret (optional) |
-| `IMGBB_API_KEY` | imgbb API key (used from client, server can verify if needed) |
-
-### `client/.env`
-| Key | Description |
-|-----|-------------|
-| `VITE_API_URL` | Base URL for the API (e.g. `http://localhost:5000/api`) |
-| `VITE_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key |
-| `VITE_IMGBB_API_KEY` | imgbb API key for client-side uploads |
-| `VITE_GOOGLE_CLIENT_ID` | Google OAuth client ID |
-
----
-
-## Default demo accounts
-
-After running `npm run seed`:
-
-| Role   | Email                  | Password     |
-|--------|------------------------|--------------|
-| Admin  | admin@ticketbari.test  | Admin123!    |
-| Vendor | vendor@ticketbari.test | Vendor123!   |
-| User   | user@ticketbari.test   | User123!     |
-
----
-
-## API reference
+## 📡 API Reference
 
 Base URL: `/api`
 
-### Auth
-| Method | Endpoint       | Auth | Description |
-|--------|----------------|------|-------------|
-| POST   | `/auth/register` | —    | Register a new user |
-| POST   | `/auth/login`    | —    | Login with email/password |
-| POST   | `/auth/google`   | —    | Login/register via Google payload |
-| GET    | `/auth/me`       | ✓    | Get current user |
+### Auth Endpoints
+- `POST /auth/register` — Register traveler
+- `POST /auth/login` — Login with credentials
+- `POST /auth/google` — Secure access token validator
+- `GET /auth/me` — Retrieve active session
 
-### Tickets
-| Method | Endpoint                  | Auth  | Description |
-|--------|---------------------------|-------|-------------|
-| GET    | `/tickets`                | —     | List approved tickets (search, filter, sort, pagination) |
-| GET    | `/tickets/advertised`     | —     | Get up to 6 advertised tickets |
-| GET    | `/tickets/latest`         | —     | Get 8 latest tickets |
-| GET    | `/tickets/:id`            | —     | Get one ticket |
-| POST   | `/tickets`                | vendor/admin | Add a new ticket |
-| PUT    | `/tickets/:id`            | owner/admin  | Update ticket |
-| DELETE | `/tickets/:id`            | owner/admin  | Delete ticket |
-| GET    | `/tickets/vendor/mine`    | vendor       | Vendor's own tickets |
-| GET    | `/tickets/admin/all`      | admin        | All tickets (any status) |
-| PATCH  | `/tickets/:id/verify`     | admin        | Approve / reject ticket |
-| PATCH  | `/tickets/:id/advertise`  | admin        | Toggle advertisement |
+### Ticket Endpoints
+- `GET /tickets` — Query approved listings (search, filter, sort, paginate)
+- `GET /tickets/advertised` — Get up to 6 advertised listings
+- `GET /tickets/latest` — Get latest 8 listings
+- `POST /tickets` — Create a pending ticket (Vendor/Admin)
+- `PUT /tickets/:id` — Update ticket details (Owner/Admin)
 
-### Bookings
-| Method | Endpoint                  | Auth  | Description |
-|--------|---------------------------|-------|-------------|
-| POST   | `/bookings`               | user  | Create a booking request |
-| GET    | `/bookings/mine`          | user  | My bookings |
-| GET    | `/bookings/requests`      | vendor| Booking requests for vendor's tickets |
-| PATCH  | `/bookings/:id/accept`    | vendor| Accept a booking |
-| PATCH  | `/bookings/:id/reject`    | vendor| Reject a booking |
+### Booking Endpoints
+- `POST /bookings` — Initiate booking request
+- `GET /bookings/my-bookings` — Traveler booking list
+- `DELETE /bookings/:id/cancel` — Cancel booking before acceptance
+- `PUT /bookings/:id/status` — Accept/Reject requests (Vendor)
 
-### Payments
-| Method | Endpoint                  | Auth | Description |
-|--------|---------------------------|------|-------------|
-| POST   | `/payments/create-intent` | user | Create Stripe PaymentIntent |
-| POST   | `/payments/confirm`       | user | Confirm payment, mark booking paid, reduce ticket qty |
-| GET    | `/payments/transactions`  | user | My transactions |
-
-### Users
-| Method | Endpoint                  | Auth  | Description |
-|--------|---------------------------|-------|-------------|
-| GET    | `/users/me`               | ✓     | Current user |
-| PUT    | `/users/me`               | ✓     | Update profile |
-| GET    | `/users/vendor/revenue`   | vendor| Revenue overview |
-| GET    | `/users`                  | admin | List all users |
-| PATCH  | `/users/:id/role`         | admin | Change user role |
-| PATCH  | `/users/:id/fraud`        | admin | Toggle fraud flag on vendor |
-
----
-
-## Frontend routes
-
-| Path | Access | Description |
-|------|--------|-------------|
-| `/` | public | Home |
-| `/tickets` | public | All tickets (search / filter / sort / pagination) |
-| `/tickets/:id` | public | Ticket details + booking modal |
-| `/about` `/contact` | public | Static pages |
-| `/login` `/register` | public | Auth pages |
-| `/dashboard` | auth | Role-based redirect |
-| `/dashboard/profile` | auth | Profile (role-aware) |
-| `/dashboard/bookings` | user | My booked tickets |
-| `/dashboard/transactions` | user | Transaction history |
-| `/dashboard/add-ticket` | vendor | Add ticket form |
-| `/dashboard/my-tickets` | vendor | My added tickets |
-| `/dashboard/requests` | vendor | Booking requests |
-| `/dashboard/revenue` | vendor | Revenue overview |
-| `/dashboard/manage-tickets` | admin | Approve / reject tickets |
-| `/dashboard/manage-users` | admin | Manage users |
-| `/dashboard/advertise` | admin | Toggle advertisement |
-| `*` | public | 404 |
-
----
-
-## Deployment notes
-
-- **CORS**: `CLIENT_URL` on the server must list every domain the client is served
-  from (comma-separated). Otherwise you will get CORS errors.
-- **JWT on reload**: the client stores the token in `localStorage` and rehydrates
-  the session via `GET /auth/me` on app load — logged-in users never get bounced
-  to /login on reload.
-- **MongoDB Atlas**: use a connection string with `?retryWrites=true&w=majority`.
-- **Stripe**: in production, register a webhook for `payment_intent.succeeded`
-  and call `markBookingPaid` from the webhook handler instead of trusting the
-  client's `/payments/confirm` call.
-- **Vercel / Netlify**: build the client with `npm run build` and serve `dist/`.
-  Use a rewrite rule to send all unknown routes to `index.html` so deep links
-  work (the `*` route handles them client-side).
-- **Render / Railway / Fly.io**: deploy the server as a Node service with
-  `npm start`, set `MONGO_URI` to your Atlas connection string.
-
----
-
-## Submission template
-
-```
-Admin Email:    admin@ticketbari.test
-Admin Password: Admin123!
-Vendor Email:   vendor@ticketbari.test
-Vendor Password:Vendor123!
-Live Site Link: <your deployed URL>
-Github Repository (server): <your server repo>
-Github Repository (client): <your client repo>
-```
+### Payment Endpoints
+- `POST /payments/create-intent` — Generate Stripe PaymentIntent
+- `POST /payments/confirm` — Save successful transactions
+- `GET /payments/transactions` — Transaction logs (Traveler)
