@@ -4,7 +4,7 @@ import Transaction from "../models/Transaction.js";
 import { asyncHandler, createError } from "../middleware/errorHandler.js";
 import { markBookingPaid } from "./bookingController.js";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_dummy");
+const stripe = new Stripe((process.env.STRIPE_SECRET_KEY || "").trim() || "sk_test_dummy");
 
 // POST /api/payments/create-intent  — user creates a PaymentIntent for an accepted booking
 export const createPaymentIntent = asyncHandler(async (req, res) => {
