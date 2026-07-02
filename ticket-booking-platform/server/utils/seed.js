@@ -14,10 +14,21 @@ import Booking from "../models/Booking.js";
 dotenv.config();
 
 const MONGO_URI =
-  process.env.MONGO_URI || "mongodb://localhost:27017/ticket_bari";
+  process.env.MONGO_URI || process.env.MONGODB_URI || "mongodb://localhost:27017/ticket_bari";
 
 async function run() {
-  await mongoose.connect(MONGO_URI);
+  try {
+    console.log("Connecting to URI:", MONGO_URI);
+    await mongoose.connect(MONGO_URI);
+  } catch (err) {
+    console.error("❌ MongoDB connection error:", err.message);
+    if (MONGO_URI !== "mongodb://localhost:27017/ticket_bari") {
+      console.log("🔄 Retrying with local fallback: mongodb://localhost:27017/ticket_bari");
+      await mongoose.connect("mongodb://localhost:27017/ticket_bari");
+    } else {
+      process.exit(1);
+    }
+  }
   mongoose.set("strictQuery", true);
   console.log("🌱 Seeding database…");
 
@@ -59,7 +70,7 @@ async function run() {
       quantity: 30,
       departureDate: new Date(Date.now() + 86400000 * 2),
       perks: ["AC", "WiFi", "Snacks"],
-      image: "",
+      image: "/images/bus.jpg",
       vendor: vendor._id,
       vendorName: vendor.name,
       vendorEmail: vendor.email,
@@ -75,7 +86,7 @@ async function run() {
       quantity: 50,
       departureDate: new Date(Date.now() + 86400000 * 3),
       perks: ["AC"],
-      image: "",
+      image: "/images/train.jpg",
       vendor: vendor._id,
       vendorName: vendor.name,
       vendorEmail: vendor.email,
@@ -91,11 +102,27 @@ async function run() {
       quantity: 20,
       departureDate: new Date(Date.now() + 86400000 * 4),
       perks: ["Cabin", "AC", "Breakfast"],
-      image: "",
+      image: "/images/launch.jpg",
       vendor: vendor._id,
       vendorName: vendor.name,
       vendorEmail: vendor.email,
       verificationStatus: "approved",
+    },
+    {
+      title: "Dhaka → Cox's Bazar Flight",
+      from: "Dhaka",
+      to: "Cox's Bazar",
+      transportType: "plane",
+      price: 4500,
+      quantity: 15,
+      departureDate: new Date(Date.now() + 86400000 * 1),
+      perks: ["Window Seat", "Snacks", "Extra Baggage"],
+      image: "/images/plane.jpg",
+      vendor: vendor._id,
+      vendorName: vendor.name,
+      vendorEmail: vendor.email,
+      verificationStatus: "approved",
+      isAdvertised: true,
     },
   ]);
 
